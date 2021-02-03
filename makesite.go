@@ -4,6 +4,8 @@ import (
 	"io/ioutil"
 	"os"
 	"html/template"
+	"flag"
+	"fmt"
 )
 
 // Data is 
@@ -42,6 +44,8 @@ func writeTemplate(fileContent string, templateFile string, newFile string) {
 func main() {
 	writeTemplate(readFile("first-post.txt"), "template.tmpl", "first-post.html")
 	
-	
-	
+	filePtr := flag.String("file", "defaultValue", "File to HTML.")
+	flag.Parse()
+	save(filePtr)
+	fmt.Println("file:", *filePtr)
 }
