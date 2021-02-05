@@ -1,16 +1,14 @@
 package main
 
 import (
+	"html/template"
 	"io/ioutil"
 	"os"
-	"html/template"
-	"flag"
-	"fmt"
 )
 
-// Data is 
+// Data is
 type Data struct {
-	Content string 
+	Content string
 }
 
 func check(e error) {
@@ -25,27 +23,27 @@ func readFile(filename string) string {
 	return string(fileContent)
 }
 
-
-func writeTemplate(fileContent string, templateFile string, newFile string) {
+func renderTemplate(fileContent string, templateFile string, newFile string) {
 	tmpl := template.Must(template.New(templateFile).ParseFiles(templateFile))
 	content := Data{Content: string(fileContent)}
-	
+
 	f, err := os.Create(newFile)
 	check(err)
 	defer f.Close()
 
-	err = tmpl.Execute(os.Stdout, content)
+	err = tmpl.Execute(f, content)
 	check(err)
 
 	f.Close()
 }
 
-
 func main() {
-	writeTemplate(readFile("first-post.txt"), "template.tmpl", "first-post.html")
-	
-	filePtr := flag.String("file", "defaultValue", "File to HTML.")
+	renderTemplate(readFile("first-post.txt"), "template.tmpl", "first-post.html")
+
+	filePtr := flag.StringVar(...., "file", "defaultValue", "Text file name to turn to HTML page.")
 	flag.Parse()
 	save(filePtr)
+	
+	
 	fmt.Println("file:", *filePtr)
 }
