@@ -8,6 +8,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/gomarkdown/markdown"
 )
 
 // Data is
@@ -53,6 +55,20 @@ func getFiles(directory string) {
 	}
 }
 
+func convertMdtoHTMl(file string) {
+	content, err := ioutil.ReadFile(file)
+	check(err)
+
+	html := markdown.ToHTML(content, nil, nil)
+	// fmt.Printf(string(html))
+
+	fileOut := strings.Split(file, ".md")[0] + ".html"
+	writeError := ioutil.WriteFile(fileOut, html, 0644)
+	if writeError != nil {
+		log.Fatalf("Could not write to %s", fileOut)
+	}
+}
+
 func main() {
 	var fileName string
 	flag.StringVar(&fileName, "file", "defaultValue", "Text file name to turn to HTML page.")
@@ -79,4 +95,7 @@ func main() {
 			renderTemplate(readFile(file.Name()), "template.tmpl", file.Name())
 		}
 	}
+
+	convertMdtoHTMl("README.md")
+
 }
