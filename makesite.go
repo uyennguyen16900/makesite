@@ -55,7 +55,7 @@ func getFiles(directory string) {
 	}
 }
 
-func convertMdtoHTMl(file string) {
+func convertMdtoHTML(file string) {
 	content, err := ioutil.ReadFile(file)
 	check(err)
 
@@ -96,6 +96,6 @@ func main() {
 		}
 	}
 
-	convertMdtoHTMl("README.md")
+	convertMdtoHTML("README.md")
 
 }
